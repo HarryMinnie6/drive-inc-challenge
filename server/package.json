@@ -1,0 +1,21 @@
+{
+    "name": "drive-inc-challenge-server",
+    "version": "1.0.0",
+    "description": "Coding challenge",
+    "main": "server.js",
+    "scripts": {
+        "test": "npm test",
+        "start": "node server.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "concurrently": "^9.0.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.0",
+        "firebase": "^10.13.2",
+        "firebase-admin": "^12.5.0"
+    }
+}

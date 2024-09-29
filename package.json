@@ -1,0 +1,15 @@
+{
+  "name": "drive-inc-challenge",
+  "version": "1.0.0",
+  "description": "Coding challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "dev": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
