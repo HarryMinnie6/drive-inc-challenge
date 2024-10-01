@@ -14,10 +14,27 @@ router.get('/all-reservations', async (request, response) => {
       ...doc.data()
     }));
 
-    if (reservations.length === 0) return response.status(204).json("No Rservations found");
+    if (reservations.length === 0) return response.status(204).json("No Reservations found");
     return response.status(200).json(reservations);
   } catch (error) {
     console.error("Error fetching all reservations:", error);
+    throw error;
+  }
+});
+
+router.get('/all-reservation-locations', async (request, response) => {
+  try {
+    const reservationLocations = collection(fireStoreDb, "reservationLocations");
+    const snapshot = await getDocs(reservationLocations);
+    const locations = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    if (locations.length === 0) return response.status(204).json("No Reservations found");
+    return response.status(200).json(locations);
+  } catch (error) {
+    console.error("Error fetching reservationLocations:", error);
     throw error;
   }
 });

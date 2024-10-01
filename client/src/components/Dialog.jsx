@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -8,29 +8,26 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-
-export default function FormDialog({bookATestDrive}) {
+function FormDialog ({ bookATestDrive, date, selectedTime }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [contactNumber, setContactNumber] = useState(null);
+  const [hoveredLocation, setHoveredLocation] = useState(null);
 
+  const handleClickOpen = () => { setOpen(true); };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  console.log("name", name);
-  console.log("email", email);
-  
+  const handleClose = () => { setOpen(false); };
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button style={{
+        border: '2px solid #0AE0D1',
+        backgroundColor: hoveredLocation === location && '#0AE0D1',
+        color: hoveredLocation === location ? 'white' : 'black',
+      }}
+      onMouseEnter={() => setHoveredLocation(location)}
+      onMouseLeave={() => setHoveredLocation(null)} variant="outlined" onClick={handleClickOpen}>
         Reserve a time slot
       </Button>
       <Dialog
@@ -50,6 +47,12 @@ export default function FormDialog({bookATestDrive}) {
       >
         <DialogTitle>Reservation details</DialogTitle>
         <DialogContent>
+          <DialogContentText style={{ color: 'black' }}>
+            Date: {date}
+          </DialogContentText>
+          <DialogContentText style={{ color: 'black', marginBottom: 10 }}>
+            Time: {selectedTime}
+          </DialogContentText>
           <DialogContentText>
             We need to following details from you to reserve your timeslot
           </DialogContentText>
@@ -65,7 +68,7 @@ export default function FormDialog({bookATestDrive}) {
             variant="standard"
             onChange={(e) => setName(e.target.value)}
           />
-           <TextField
+          <TextField
             autoFocus
             required
             margin="dense"
@@ -89,7 +92,7 @@ export default function FormDialog({bookATestDrive}) {
             variant="standard"
             onChange={(e) => setEmail(e.target.value)}
           />
-         
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -99,3 +102,5 @@ export default function FormDialog({bookATestDrive}) {
     </React.Fragment>
   );
 }
+
+export default FormDialog

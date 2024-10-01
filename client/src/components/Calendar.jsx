@@ -2,14 +2,15 @@ import { Button } from '@mui/material';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Dialog from "./Dialog"
+import Dialog from './Dialog'
 import SnackBar from './SnackBar';
+import './Calendar.css';
+import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
-
-function MyCalendar({ vehicleDetails, vehicleReservations }) {
+function MyCalendar ({ vehicleDetails, vehicleReservations }) {
   const [date, setDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [bookingDetails, setBookingDetails] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -39,9 +40,15 @@ function MyCalendar({ vehicleDetails, vehicleReservations }) {
 
   const disableUnavailableDays = ({ date }) => {
     const today = new Date();
+
+    // this below stops today being disabled...
+    today.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+
     if (date < today) return true; // disables 'yesterday' etc
+
     const dayOfWeek = date.getDay();
-    const dayNames = ["sun", "mon", "tue", "wed", "thur", "fri", "sat"];
+    const dayNames = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat'];
     const isAvailable = availableDays?.includes(dayNames[dayOfWeek]);
     return !isAvailable;
   };
@@ -68,8 +75,6 @@ function MyCalendar({ vehicleDetails, vehicleReservations }) {
   const day = String(dateStr.getDate()).padStart(2, '0');
   const formattedDatefromCalendarselection = `${year}-${month}-${day}`;
 
-  console.log(formattedDatefromCalendarselection); // Example: 2024-10-18
-
   const checkBookings = (timeSlots, reservations, date) => {
     return timeSlots.map(slot => {
       const [slotStart, slotEnd] = slot.split(' - ').map(time => new Date(`1970-01-01T${time}:00`));
@@ -87,10 +92,17 @@ function MyCalendar({ vehicleDetails, vehicleReservations }) {
 
   const updatedTimeslots = checkBookings(timeSlots, reservationsArray, formattedDatefromCalendarselection);
 
+  const navigate = useNavigate();
+  const navigateToHome = () => {
+    setTimeout(() => {
+      navigate('/');
+    }, 2200);;
+  }
+
   const bookATestDrive = async (customerName, customerEmail, contactNumber) => {
     try {
       const bookingStartTime = selectedTime.slice(0, 5);
-      const [hours, minutes] = bookingStartTime.split(":")
+      const [hours, minutes] = bookingStartTime.split(':')
       const date = new Date();
       date.setHours(parseInt(hours));
       date.setMinutes(parseInt(minutes));
@@ -108,8 +120,8 @@ function MyCalendar({ vehicleDetails, vehicleReservations }) {
         startDateTime: startDateTime,
         endDateTime: endDateTime
       }
-      setIsLoading(true)
-      const response = await fetch(`http://localhost:3000/reservations/vehicle-reservation`, {
+
+      const response = await fetch('http://localhost:3000/reservations/vehicle-reservation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,54 +131,65 @@ function MyCalendar({ vehicleDetails, vehicleReservations }) {
 
       const successfullBookingResponse = await response.json();
       setBookingDetails(successfullBookingResponse)
-      console.log("successfullBookingResponse", successfullBookingResponse);
-      setIsLoading(false)
+      console.log('successfullBookingResponse', successfullBookingResponse);
       setSnackbarOpen(true)
+      navigateToHome()
     } catch (error) {
-      setIsLoading(false)
       setErrorMessage(error.message)
     }
   }
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
 
-  
+  const handleCloseSnackbar = () => { setSnackbarOpen(false); };
+
   return (
-    <div>
+    <>
+      <Typography gutterBottom variant="h6" component="div" style={{ margin: 10, color: 'black' }}>
+        To reserve a test drive please select a date and time
+      </Typography>
       <Calendar
         onChange={onDateChange}
         value={date}
         tileDisabled={disableUnavailableDays}
       />
-      <p>Selected date: {date.toDateString()}</p>
-      <p>Selected time: {selectedTime}</p>
-      {(date && selectedTime) ?
-        <Dialog bookATestDrive={bookATestDrive} /> : ""}
-       <SnackBar 
-        open={snackbarOpen} 
-        handleClose={handleCloseSnackbar} 
-        message={bookingDetails?.message} 
-      />
 
-      <div>
-        {updatedTimeslots.map((slot, index) => (
-          <Button
-            key={index}
-            style={{
-              margin: '5px',
-              padding: '10px',
-              backgroundColor: slot.isBooked ? 'red' : selectedTime === slot.time ? 'green' : 'lightgray',
-              cursor: slot.isBooked ? 'not-allowed' : 'pointer',
-            }}
-            onClick={() => !slot.isBooked && onTimeSlotChange(slot.time)}
-            disabled={slot.isBooked}
-          >
-            {slot.time}
-          </Button>
-        ))}
+      <Typography gutterBottom variant="h6" component="div" style={{ marginTop: 10, color: 'black' }}>
+        {errorMessage && `Something went wrong, please try again later: ${errorMessage}`}
+      </Typography>
+      <Typography gutterBottom variant="h6" component="div" style={{ marginTop: 10, color: 'black' }}>
+        {formattedDatefromCalendarselection && `Selected date: ${formattedDatefromCalendarselection}`}
+      </Typography>
+      <Typography gutterBottom variant="h6" component="div" style={{ marginBottom: 5, color: 'black' }}>
+        {selectedTime && `Selected time: ${selectedTime}`}
+      </Typography>
+
+      {(date && selectedTime) && <Dialog bookATestDrive={bookATestDrive} date={formattedDatefromCalendarselection} selectedTime={selectedTime} />}
+      <SnackBar
+        open={snackbarOpen}
+        handleClose={handleCloseSnackbar}
+        message={bookingDetails?.message}
+      />
+      <div style={{display: 'flex',alignItems: 'center', justifyContent: 'center'}}>
+        <div>
+          {updatedTimeslots.map((slot, index) => (
+            <Button
+              key={index}
+              style={{
+                margin: '5px',
+                marginTop: '20px',
+                padding: '10px',
+                color: slot.isBooked ? '#8C949D' : 'black',
+                backgroundColor: slot.isBooked ? '#FFA39D' : selectedTime === slot.time ? '#0AE0D1' : 'lightgray',
+                cursor: slot.isBooked ? 'not-allowed' : 'pointer',
+              }}
+              onClick={() => !slot.isBooked && onTimeSlotChange(slot.time)}
+              disabled={slot.isBooked}
+            >
+              {slot.time}
+            </Button>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

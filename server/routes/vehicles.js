@@ -22,6 +22,22 @@ router.get('/all-vehicles', async (request, response) => {
   }
 });
 
+router.get('/all-brands', async (request, response) => {
+  try {
+    const vehiclesBrandsCollection = collection(fireStoreDb, "vehicleBrands");
+    const snapshot = await getDocs(vehiclesBrandsCollection);
+    const brands = snapshot.docs.map(doc => ({
+      ...doc.data()
+    }));
+
+    if (brands.length === 0) return response.status(204).json("No Vehicle Brands found");
+    return response.status(200).json(brands);
+  } catch (error) {
+    console.error("Error fetching Vehicle Brands:", error);
+    throw error;
+  }
+});
+
 // Get Vehicle By Id
 router.get('/single-vehicle/:id', async (request, response) => {
   const vehicleId = request.params.id;
