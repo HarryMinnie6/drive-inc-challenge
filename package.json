@@ -4,8 +4,8 @@
   "description": "Coding challenge",
   "main": "index.js",
   "scripts": {
-    "install-all": "concurrently -n \"CURRENT,SERVER,CLIENT\" -c \"green,yellow,magenta\" \"npm install\" \"cd server && npm install\" \"cd client && npm install\"",
-    "dev": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,yellow\" \"cd server && npm run start\" \"cd client && npm run dev\"",
     "test": "npm test"
   },
   "author": "",
