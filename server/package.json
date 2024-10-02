@@ -4,18 +4,34 @@
     "description": "Coding challenge",
     "main": "server.js",
     "scripts": {
-        "test": "npm test",
-        "start": "node server.js"
+        "test": "jest",
+        "start": "node server.js --poll"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@firebase/rules-unit-testing": "^3.0.4",
         "body-parser": "^1.20.3",
+        "chai": "^5.1.1",
         "concurrently": "^9.0.1",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "express": "^4.21.0",
         "firebase": "^10.13.2",
-        "firebase-admin": "^12.5.0"
-    }
+        "firebase-admin": "^12.5.0",
+        "request": "^2.88.2",
+        "sinon": "^19.0.2"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.25.7",
+        "babel-jest": "^29.7.0",
+        "firebase-functions-test": "^3.3.0",
+        "firebase-mock": "^2.3.2",
+        "jest": "^29.7.0",
+        "nock": "^13.5.5",
+        "supertest": "^7.0.0"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-musl": "4.9.5"
+      }
 }
