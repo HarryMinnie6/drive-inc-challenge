@@ -6,7 +6,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import {uppercaseFirstLetter, imagePathName} from '../utils/utils.js';
 
 function DisplayCard ({ vehicle }) {
   const navigate = useNavigate();
@@ -14,27 +15,19 @@ function DisplayCard ({ vehicle }) {
   const [randomNumber, setRandomNumber] = useState(1);
 
   useEffect(() => {
-    // Generate the random number once when the component mounts
     setRandomNumber(Math.floor(Math.random() * 4) + 1);
-  }, []); // Empty dependency array ensures it only runs once
+  }, []);
 
   const navigateToBookingsPage = (vehicleId, imagePath, vehicleBrandAndModel) => {
     navigate(`/vehicle/${vehicleId}`, {
       state: { imagePath, vehicleBrandAndModel }
     });
-  }
+  };
 
-  const uppercaseFirstLetter = (string) => {
-    return string?.charAt(0).toUpperCase() + string.slice(1);
-  }
+  const imagePath = imagePathName(vehicle.type, randomNumber);
 
-  const imagePathName = (vehicleType, randomNumber) => {
-    return `/vehicles/${vehicleType}_${randomNumber}.png`
-  }
-  const imagePath = imagePathName(vehicle.type, randomNumber)
-
-  const vehicleType = uppercaseFirstLetter(vehicle?.type.split('_')[0])
-  const vehicleBrandAndModel = `${vehicleType} ${vehicle?.model}`
+  const vehicleType = uppercaseFirstLetter(vehicle?.type.split('_')[0]);
+  const vehicleBrandAndModel = `${vehicleType} ${vehicle?.model}`;
   return (
     <Card sx={{border: '1px solid #DEDEDE', boxShadow: 'none', backgroundColor: '#E6E5E5',minWidth: 400, maxWidth: 500, margin: '10px', marginBottom: 5 }}>
       
@@ -72,4 +65,4 @@ function DisplayCard ({ vehicle }) {
   );
 }
 
-export default DisplayCard
+export default DisplayCard;

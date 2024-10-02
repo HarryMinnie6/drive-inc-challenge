@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 
 import DisplayCard from '../components/DisplayCard';
 import SelectorBar from '../components/SelectorBar';
+import {uppercaseFirstLetter} from '../utils/utils.js';
 
 function VehicleDisplay () {
   const [allVehicles, setVehicles] = useState([]);
@@ -18,26 +19,22 @@ function VehicleDisplay () {
   }, []);
 
   const getAllVehicles = async () => {
-    const allVehiclesResponse = await fetch('http://localhost:3000/vehicles/all-vehicles', {})
+    const allVehiclesResponse = await fetch('http://localhost:3000/vehicles/all-vehicles', {});
     const allVehiclesData = await allVehiclesResponse.json();
     setVehicles(allVehiclesData);
-  }
+  };
 
   const getAllVehicleBrands = async () => {
-    const allVehicleBrandsResponse = await fetch('http://localhost:3000/vehicles/all-brands', {})
+    const allVehicleBrandsResponse = await fetch('http://localhost:3000/vehicles/all-brands', {});
     const allVehicleBrandsData = await allVehicleBrandsResponse.json();
     setVehicleBrands(allVehicleBrandsData);
-  }
+  };
 
   const getAllAvailableLocations = async () => {
-    const allReservationsLocations = await fetch('http://localhost:3000/reservations/all-reservation-locations', {})
+    const allReservationsLocations = await fetch('http://localhost:3000/reservations/all-reservation-locations', {});
     const allLocationsData = await allReservationsLocations.json();
     setAllAvailableLocations(allLocationsData);
-  }
-
-  const uppercaseFirstLetter = (string) => {
-    return string?.charAt(0).toUpperCase() + string.slice(1);
-  }
+  };
 
   const vehicleBrands = allVehicleBrands[0]?.vehicleBrands;
 
@@ -72,7 +69,7 @@ function VehicleDisplay () {
         );
       })}
     </div>
-  )
+  );
 }
 
-export default VehicleDisplay
+export default VehicleDisplay;

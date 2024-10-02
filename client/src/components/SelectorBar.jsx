@@ -10,7 +10,7 @@ function SelectorBar ({ allAvailableLocations, setTestDriveLocation }) {
     borderRadius: '0',
     transition: 'background-color 0.3s ease',
     color: 'black'
-  }
+  };
 
   return (
     <>
@@ -22,7 +22,8 @@ function SelectorBar ({ allAvailableLocations, setTestDriveLocation }) {
           }}
           onClick={() => setTestDriveLocation('')}
           onMouseEnter={() => setHoveredLocation('')}
-          onMouseLeave={() => setHoveredLocation(null)}>All locations
+          onMouseLeave={() => setHoveredLocation(null)}>
+          All locations
         </Button>
         {allAvailableLocations?.map((location) => (
           <Button

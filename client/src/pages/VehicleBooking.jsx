@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
-import { useParams, useLocation} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import MyCalendar from '../components/Calendar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { uppercaseFirstLetter } from '../utils/utils.js';
 
 function VehicleBooking () {
   const [vehicle, setVehicle] = useState([]);
@@ -14,24 +15,20 @@ function VehicleBooking () {
   const { vehicleBrandAndModel } = location.state || '';
 
   useEffect(() => {
-    getVehicleInformation(vehicleId)
-    getAllReservations(vehicleId)
+    getVehicleInformation(vehicleId);
+    getAllReservations(vehicleId);
   }, []);
 
   const getVehicleInformation = async (vehicleId) => {
-    const vehicleResponse = await fetch(`http://localhost:3000/vehicles/single-vehicle/${vehicleId}`, {})
+    const vehicleResponse = await fetch(`http://localhost:3000/vehicles/single-vehicle/${vehicleId}`, {});
     const vehicleData = await vehicleResponse.json();
-    setVehicle(vehicleData)
-  }
+    setVehicle(vehicleData);
+  };
   const getAllReservations = async (vehicleId) => {
-    const reservationsResponse = await fetch(`http://localhost:3000/reservations/all-reservations-for-vehicle/${vehicleId}`, {})
+    const reservationsResponse = await fetch(`http://localhost:3000/reservations/all-reservations-for-vehicle/${vehicleId}`, {});
     const reservationData = await reservationsResponse.json();
-    setVehicleReservations(reservationData)
-  }
-
-  const uppercaseFirstLetter = (string) => {
-    return string?.charAt(0).toUpperCase() + string.slice(1);
-  }
+    setVehicleReservations(reservationData);
+  };
 
   return (
     <>
@@ -49,6 +46,7 @@ function VehicleBooking () {
         <Typography gutterBottom variant="h4" component="div" >
           {vehicleBrandAndModel}
         </Typography>
+
         <Typography variant="h4" sx={{ marginBottom: 1, color: '#8C949D' }}>
           {vehicle?.location && uppercaseFirstLetter(vehicle?.location)}
         </Typography>
@@ -56,15 +54,11 @@ function VehicleBooking () {
         <Typography gutterBottom variant="h6" component="div" style={{ marginBottom: 15, color: '#8C949D' }}>
           Up to {vehicle.range}km Range
         </Typography>
+
         <MyCalendar vehicleDetails={vehicle} vehicleReservations={vehicleReservations} />
       </div>
-
-      <div>
-       
-      </div>
-
     </>
-  )
+  );
 }
 
-export default VehicleBooking
+export default VehicleBooking;

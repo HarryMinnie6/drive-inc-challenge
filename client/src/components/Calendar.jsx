@@ -2,11 +2,12 @@ import { Button } from '@mui/material';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Dialog from './Dialog'
+import Dialog from './Dialog';
 import SnackBar from './SnackBar';
 import './Calendar.css';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { navigateToHome } from '../utils/utils.js';
 
 function MyCalendar ({ vehicleDetails, vehicleReservations }) {
   const [date, setDate] = useState(new Date());
@@ -14,14 +15,15 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [bookingDetails, setBookingDetails] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const availableDays = vehicleDetails?.availableDays;
-  const availableFromTime = vehicleDetails?.availableFromTime
-  const availableToTime = vehicleDetails?.availableToTime
+  const availableFromTime = vehicleDetails?.availableFromTime;
+  const availableToTime = vehicleDetails?.availableToTime;
 
   const generateAvailableTimeSlots = (availableFromTime, availableToTime,) => {
-    const slotDurationMinutes = 45
-    const bufferMinutes = 15
+    const slotDurationMinutes = 45;
+    const bufferMinutes = 15;
     let slots = [];
     const firstAvailablilitySlot = new Date(`1970-01-01T${availableFromTime}Z`); // NOTE: reservation times are in this format
     const lastAvailbilitySlot = new Date(`1970-01-01T${availableToTime}Z`);
@@ -54,9 +56,9 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
   };
 
   const onDateChange = (date) => {
-    setDate(date)
+    setDate(date);
     setSelectedTime(null);
-  }
+  };
 
   const onTimeSlotChange = (time) => {
     setSelectedTime(time);
@@ -64,10 +66,10 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
 
   const reservationsArray = [];
   vehicleReservations.map((reservation) => {
-    const reservationDate = reservation.startDateTime.slice(0, 10)
-    const formattedReservation = `${reservation.startDateTime.slice(11, 16)} - ${reservation.endDateTime.slice(11, 16)}`
+    const reservationDate = reservation.startDateTime.slice(0, 10);
+    const formattedReservation = `${reservation.startDateTime.slice(11, 16)} - ${reservation.endDateTime.slice(11, 16)}`;
     reservationsArray.push({ day: reservationDate, time: formattedReservation });
-  })
+  });
 
   const dateStr = new Date(date);
   const year = dateStr.getFullYear();
@@ -92,25 +94,18 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
 
   const updatedTimeslots = checkBookings(timeSlots, reservationsArray, formattedDatefromCalendarselection);
 
-  const navigate = useNavigate();
-  const navigateToHome = () => {
-    setTimeout(() => {
-      navigate('/');
-    }, 2200);;
-  }
-
   const bookATestDrive = async (customerName, customerEmail, contactNumber) => {
     try {
       const bookingStartTime = selectedTime.slice(0, 5);
-      const [hours, minutes] = bookingStartTime.split(':')
+      const [hours, minutes] = bookingStartTime.split(':');
       const date = new Date();
       date.setHours(parseInt(hours));
       date.setMinutes(parseInt(minutes));
       date.setMinutes(date.getMinutes() + 45);
       const bookingEndTime = date.toTimeString().slice(0, 5);
 
-      const startDateTime = `${formattedDatefromCalendarselection}T${bookingStartTime}:00Z`
-      const endDateTime = `${formattedDatefromCalendarselection}T${bookingEndTime}:00Z`
+      const startDateTime = `${formattedDatefromCalendarselection}T${bookingStartTime}:00Z`;
+      const endDateTime = `${formattedDatefromCalendarselection}T${bookingEndTime}:00Z`;
 
       const requestBody = {
         customerEmail: customerEmail,
@@ -119,7 +114,7 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
         vehicleId: vehicleDetails.id,
         startDateTime: startDateTime,
         endDateTime: endDateTime
-      }
+      };
 
       const response = await fetch('http://localhost:3000/reservations/vehicle-reservation', {
         method: 'POST',
@@ -130,14 +125,13 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
       });
 
       const successfullBookingResponse = await response.json();
-      setBookingDetails(successfullBookingResponse)
-      console.log('successfullBookingResponse', successfullBookingResponse);
-      setSnackbarOpen(true)
-      navigateToHome()
+      setBookingDetails(successfullBookingResponse);
+      setSnackbarOpen(true);
+      navigateToHome(navigate);
     } catch (error) {
-      setErrorMessage(error.message)
+      setErrorMessage(error.message);
     }
-  }
+  };
 
   const handleCloseSnackbar = () => { setSnackbarOpen(false); };
 
@@ -168,7 +162,7 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
         handleClose={handleCloseSnackbar}
         message={bookingDetails?.message}
       />
-      <div style={{display: 'flex',alignItems: 'center', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>
           {updatedTimeslots.map((slot, index) => (
             <Button
