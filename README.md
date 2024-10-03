@@ -69,7 +69,7 @@ To run tests, run the following command in the `client` folder _(Note: there are
 
 ## Improvements _(this is currently a very simple MVP)_
 
-Small changes for the future.
+Changes for the future.
 * Tests for server files
 * More test for client files
 * Notifications to person making reservation.
