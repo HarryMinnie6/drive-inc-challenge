@@ -161,7 +161,7 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
         handleClose={handleCloseSnackbar}
         message={bookingDetails?.message}
       />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: "70px"}}>
         <div>
           {updatedTimeslots.map((slot, index) => (
             <Button
