@@ -67,3 +67,13 @@ To run tests, run the following command in the `client` folder _(Note: there are
   npm test
 ```
 
+## Improvements _(this is currently a very simple MVP)_
+
+Small changes for the future.
+* Tests for server files
+* More test for client files
+* Notifications to person making reservation.
+* User login and auth before reservations.
+* Initial display screen needs a loading screen/spinner.
+* Setup firebase to run locally.
+* UI improvements.
