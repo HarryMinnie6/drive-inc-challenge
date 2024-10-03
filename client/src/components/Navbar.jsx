@@ -12,7 +12,7 @@ function NavBar () {
         <Toolbar disableGutters>
           <div style={{ flexGrow: 1 }}>
             <Link to="/">
-              <Button style={{ fontSize: '25px', color: 'white', fontFamily: 'mundial, sans-serif' }} >Drive Inc. Challenge</Button>
+              <Button style={{ fontSize: '25px', color: 'white', fontFamily: 'mundial, sans-serif' }} >Drive. Challenge</Button>
             </Link>
           </div>
           <Link to="/">
