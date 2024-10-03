@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 
-function SelectorBar ({ allAvailableLocations, setTestDriveLocation }) {
+function SelectorBar ({ data, setFunction, dataType }) {
   const [hoveredLocation, setHoveredLocation] = useState(null);
 
   const buttonStyle = {
@@ -20,19 +20,19 @@ function SelectorBar ({ allAvailableLocations, setTestDriveLocation }) {
             ...buttonStyle,
             backgroundColor: hoveredLocation === '' ? '#DEDEDE' : '#F3F4F5',
           }}
-          onClick={() => setTestDriveLocation('')}
+          onClick={() => setFunction('')}
           onMouseEnter={() => setHoveredLocation('')}
           onMouseLeave={() => setHoveredLocation(null)}>
-          All locations
+          All {dataType}
         </Button>
-        {allAvailableLocations?.map((location) => (
+        {data?.map((location) => (
           <Button
             key={location}
             style={{
               ...buttonStyle,
               backgroundColor: hoveredLocation === location ? '#DEDEDE' : '#F3F4F5',
             }}
-            onClick={() => setTestDriveLocation(location)}
+            onClick={() => setFunction(location)}
             onMouseEnter={() => setHoveredLocation(location)}
             onMouseLeave={() => setHoveredLocation(null)}
           >
