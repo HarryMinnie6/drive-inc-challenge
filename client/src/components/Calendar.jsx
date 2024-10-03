@@ -42,13 +42,12 @@ function MyCalendar ({ vehicleDetails, vehicleReservations }) {
 
   const disableUnavailableDays = ({ date }) => {
     const today = new Date();
-
-    // this below stops today being disabled...
     today.setHours(0, 0, 0, 0);
-    date.setHours(0, 0, 0, 0);
-
-    if (date < today) return true; // disables 'yesterday' etc
-
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 14);
+  
+    if (date < today || date > maxDate) return true;
+  
     const dayOfWeek = date.getDay();
     const dayNames = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat'];
     const isAvailable = availableDays?.includes(dayNames[dayOfWeek]);
